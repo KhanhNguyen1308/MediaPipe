@@ -7,7 +7,7 @@ mp_draw = mp.solutions.drawing_utils
 
 cap = cv2.VideoCapture(0)
 
-
+resize = False
 with mp_facedetector.FaceDetection(min_detection_confidence=0.7) as face_detection:
 
     while cap.isOpened():
@@ -49,12 +49,15 @@ with mp_facedetector.FaceDetection(min_detection_confidence=0.7) as face_detecti
 
         fps = 1 / totalTime
         print("FPS: ", fps)
-
+        if resize:
+            image = cv2.resize(image, dsize=None, fx=0.5, fy=0.5)
         cv2.putText(image, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX,0.5, (0,255,0), 2)
 
         cv2.imshow('Face Detection', image)
-
-        if cv2.waitKey(5) & 0xFF == 27:
+        key = cv2.waitKey(1)
+        if key == ord('q'):
             break
+        if key == ord('r'):
+            resize = True
 
 cap.release()
